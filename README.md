@@ -15,7 +15,7 @@ A research and production-grade conversational AI toolkit dedicated to two core 
 
 ## 1. Multi-Party Conversation Modeling & Next-Speaker Prediction
 
-Group conversations exhibit rich sociological turn-taking dynamics that break standard two-party dialogue assumptions. In a meeting with participants $\{A, B, C, D\}$, conversational floor transitions depend not only on lexical semantic content, but heavily on conversational history, participant roles, and prior turn ownership.
+Group conversations follow distinct turn-taking dynamics that differ from two-party dialogue. In a meeting with participants $\{A, B, C, D\}$, who speaks next depends on conversational history, participant roles, and prior turn ownership, alongside the lexical content of the current utterance.
 
 ### 1.1 Temporal Turn Aggregation (`build_turns`)
 Raw meeting transcriptions record words with millisecond start and end timestamps. Consecutive word fragments from the same participant are merged into single conversational turns whenever the inter-word gap satisfies:
