@@ -27,7 +27,6 @@ jobs:
       - name: Run unit tests
         run: pytest -v
 
-      - name: Verify CLI benchmark suites
+      - name: Verify CLI benchmark suite
         run: |
-          python scripts/evaluate_spoken_pipeline.py
-          python scripts/run_dialogue_benchmarks.py
+          python scripts/run_benchmarks.py
