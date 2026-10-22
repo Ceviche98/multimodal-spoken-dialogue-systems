@@ -134,6 +134,30 @@ Analysis of `data/asr_evaluation_results.csv` reveals three structural failure m
    - In **`Food_Peru_3`** (*"let's book a table at the peruvian cevichería tonight"*), `Whisper-Base` collapses to **`"sebi kerya"`** ($\text{WER} = 33.33\%, \text{Sim}_{\text{sem}} = 0.594$), `Distil-Whisper` outputs **`"cibiria"`** ($\text{WER} = 22.22\%$), and `Whisper Large-v3-Turbo` produces the near-exact ASCII transliteration **`"cevicheria"`** ($\text{WER} = 11.11\%$, $\text{CER} = 1.85\%$, $\text{Sim}_{\text{sem}} = 0.962$).
    - Interestingly, in **`Business_2`** (*"let's review the key performance indicators for q3"*), `Turbo` expands the spoken abbreviation `"q3"` into **`"quarter three"`** ($\text{WER} = 25.00\%$). While penalized by strict string-level WER, this normalization preserves 100% of the business intent.
 
+### 1.5 Spoken Retrieval-Augmented Generation (Spoken RAG) Pipeline (`spoken_rag.py`)
+
+In Assignment 2 (Part A / Lab 8), the acoustic speech front-end is paired with the dense retrieval engine from Coursework 1 (Part D / Lab 4) to construct an end-to-end **Spoken Question-Answering Agent**:
+
+```
+Spoken Audio / ASR Hypothesis
+            │
+            ▼
+Multi-Turn Query Formulation (`build_retrieval_query`)
+  - Resolves ellipsis & co-references across dialogue turns
+            │
+            ▼
+Contriever Dense Passage Retrieval (`ContrieverKnowledgeRetriever`)
+  - Fetches top-k verified MS MARCO / knowledge passages
+            │
+            ▼
+Grounded ChatML Synthesis (`format_rag_dialogue_prompt`)
+  - Bounds LLM generation strictly to retrieved context to eliminate hallucinations
+            │
+            ▼
+Text-to-Speech (TTS) Synthesis (`SpokenRAGAgent`)
+  - Synthesizes neural audio playback for conversational spoken interaction
+```
+
 ---
 
 ## 2. Uncertainty-Aware Clarification Dialogue Manager (`clarification_dm.py`)

@@ -227,3 +227,35 @@ def test_seq2seq_generator_models() -> None:
     gen_ids, attn_mat = greedy_decode_Ids(enc, dec_adv, src[:1], max_len=5)
     assert isinstance(gen_ids, list)
     assert attn_mat.dim() == 3
+
+
+def test_spoken_rag_pipeline() -> None:
+    from dialogue_systems import (
+        ContrieverKnowledgeRetriever,
+        SpokenRAGAgent,
+        build_retrieval_query,
+        format_rag_dialogue_prompt,
+        passage_to_text,
+    )
+
+    doc1 = {"title": "Apollo 11", "text": "Apollo 11 landed on the Moon on July 20, 1969."}
+    doc2 = {"title": "Mars Rover", "text": "Perseverance landed in Jezero crater on Mars."}
+    p_text = passage_to_text(doc1)
+    assert "Title: Apollo 11" in p_text
+    assert "Moon" in p_text
+
+    history = [("User", "Tell me about space missions"), ("Assistant", "We have Apollo and Mars records")]
+    rq = build_retrieval_query(history, "When did Apollo land?")
+    assert "Apollo" in rq
+
+    retriever = ContrieverKnowledgeRetriever([doc1, doc2])
+    results = retriever.retrieve("When did Apollo 11 land on the Moon?", top_k=1)
+    assert len(results) == 1
+    assert results[0]["title"] == "Apollo 11"
+
+    agent = SpokenRAGAgent(retriever=retriever)
+    step_out = agent.step("When did Apollo 11 land?", top_k=1)
+    assert step_out["retrieved_count"] == 1
+    assert "Apollo 11 landed on the Moon" in step_out["response_text"]
+    assert step_out["tts_ready_payload"]["text"] == step_out["response_text"]
+

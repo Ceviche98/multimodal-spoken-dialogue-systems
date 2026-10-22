@@ -20,6 +20,13 @@ from .spoken_asr import (
     analyze_asr_by_domain,
     FLEURS_BENCHMARK_WER,
 )
+from .spoken_rag import (
+    ContrieverKnowledgeRetriever,
+    SpokenRAGAgent,
+    build_retrieval_query,
+    format_rag_dialogue_prompt,
+    passage_to_text,
+)
 from .dialogue_act import (
     damsl_act_tag,
     pad_sequences,
@@ -85,6 +92,11 @@ __all__ = [
     "summarize_asr_models",
     "analyze_asr_by_domain",
     "FLEURS_BENCHMARK_WER",
+    "ContrieverKnowledgeRetriever",
+    "SpokenRAGAgent",
+    "build_retrieval_query",
+    "format_rag_dialogue_prompt",
+    "passage_to_text",
     "damsl_act_tag",
     "pad_sequences",
     "BiLSTMModel",
